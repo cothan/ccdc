@@ -1,3 +1,4 @@
+#!/usr/bin/evn python2
 # Socket server in python using select function
 
 import socket
